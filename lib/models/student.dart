@@ -1,4 +1,6 @@
 class Student {
+
+  // data members
   final int? id;
   final String name;
   final String course;
@@ -6,6 +8,7 @@ class Student {
   final int totalFee;
   final int feePaid;
 
+  // constructor
   Student({
     this.id,
     required this.name,

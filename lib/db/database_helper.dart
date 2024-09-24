@@ -41,26 +41,31 @@ class DatabaseHelper {
   void _createDb(Database db, int newVersion) async {
     await db.execute('''Create TABLE tbl_student (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  name TEXT,
-                  course TEXT UNIQUE,
-                  mobile TEXT,
+                  name TEXT NOT NULL,
+                  course TEXT,
+                  mobile TEXT UNIQUE,
                   totalFee INTEGER,
                   feePaid INTEGER
                    );
         ''');
+
   }
 
   // return data type
   // saveStudent
   // parameter -
   Future<int> saveStudent(Student s) async {
-    Database db = await database;
+    Database db = await instance.database;
 
-    int result = await db.rawInsert('''INSERT into tbl_student 
-      (name, course, mobile, totalFee, feePaid)
-      VALUES ( ?, ?, ?, ?, ?)
-    
-    ''', [s.name, s.course, s.mobile, s.totalFee, s.feePaid]);
+    // int result = await db.rawInsert('''INSERT into tbl_student
+    //   (name, course, mobile, totalFee, feePaid)
+    //   VALUES ( ?, ?, ?, ?, ?)
+    //   ''', [s.name, s.course, s.mobile, s.totalFee, s.feePaid]);
+    //
+    //
+
+    int result = await db.insert('tbl_student', s.toMap());
+
 
     return result;
   }

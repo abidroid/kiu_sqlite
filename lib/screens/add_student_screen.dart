@@ -25,7 +25,10 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('Add Student'),
+        title: const Text(
+          'Add Student',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,6 +70,10 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
               height: 16,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
                 onPressed: () async {
                   String name = nameC.text.trim();
                   String course = courseC.text.trim();
@@ -85,6 +92,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   }
                   // Todo: do validations for fields
 
+                  // Object creation
                   Student s = Student(
                     name: name,
                     course: course,
