@@ -101,7 +101,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     feePaid: int.parse(fp),
                   );
 
-                  int result = await DatabaseHelper.instance.saveStudent(s);
+                  int result = await DatabaseHelper.instance.saveStudent (s);
 
                   if (result > 0) {
                     Fluttertoast.showToast(
