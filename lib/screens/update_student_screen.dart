@@ -1,11 +1,15 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kiu_sqlite/db/database_helper.dart';
 
+import '../models/student.dart';
 import '../widgets/custom_tf.dart';
 
 class UpdateStudentScreen extends StatefulWidget {
-  const UpdateStudentScreen({super.key});
+  final Map<String, dynamic> student;
+  const UpdateStudentScreen({super.key, required this.student});
 
   @override
   State<UpdateStudentScreen> createState() => _UpdateStudentScreenState();
@@ -17,7 +21,19 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
   var courseC = TextEditingController();
   var mobileC = TextEditingController();
   var totalFeeC = TextEditingController();
-  var feePaid = TextEditingController();
+  var feePaidC = TextEditingController();
+
+  @override
+  void initState() {
+
+    nameC.text = widget.student['name'];
+    courseC.text = widget.student['course'];
+    mobileC.text = widget.student['mobile'];
+    totalFeeC.text = widget.student['totalFee'].toString();
+    feePaidC.text = widget.student['feePaid'].toString();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +57,55 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
             CustomTF(controller: totalFeeC, hintText: 'Total Fee',),
             const SizedBox(height: 16,),
 
-            CustomTF(controller: feePaid, hintText: 'Fee Paid',),
+            CustomTF(controller: feePaidC, hintText: 'Fee Paid',),
 
             const SizedBox(height: 16,),
-            ElevatedButton(onPressed: (){}, child: const Text('Update')),
+            ElevatedButton(onPressed: () async {
+
+              String name = nameC.text.trim();
+              String course = courseC.text.trim();
+              String mobile = mobileC.text.trim();
+              String tf = totalFeeC.text.trim();
+              String fp = feePaidC.text.trim();
+
+              // Validation
+              // Front End
+              if (name.isEmpty) {
+                Fluttertoast.showToast(
+                  msg: 'Please provide name',
+                  backgroundColor: Colors.red,
+                );
+                return;
+              }
+              // Todo: do validations for fields
+
+              // Object creation
+              Student s = Student(
+                id: widget.student['id'],
+                name: name,
+                course: course,
+                mobile: mobile,
+                totalFee: int.parse(tf),
+                feePaid: int.parse(fp),
+              );
+
+
+              int result = await DatabaseHelper.instance.updateStudent(s);
+
+              if (result > 0) {
+                Fluttertoast.showToast(
+                    msg: 'Record Updated $result',
+                    backgroundColor: Colors.green);
+
+                Navigator.of(context).pop(true);
+
+              } else {
+                Fluttertoast.showToast(
+                    msg: 'Something went wrong',
+                    backgroundColor: Colors.red);
+              }
+
+            }, child: const Text('Update')),
             const SizedBox(height: 16,),
 
 

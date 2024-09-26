@@ -48,7 +48,6 @@ class DatabaseHelper {
                   feePaid INTEGER
                    );
         ''');
-
   }
 
   // return data type
@@ -66,35 +65,40 @@ class DatabaseHelper {
 
     int result = await db.insert('tbl_student', s.toMap());
 
-
     return result;
   }
 
-  Future<List<Map<String,dynamic>>> getAllStudents() async {
+  Future<List<Map<String, dynamic>>> getAllStudents() async {
     List<Student> studentList = [];
 
     // access db and get all student records
     Database db = await instance.database;
 
-     List<Map<String, dynamic>> studentsMap = await db.rawQuery('SELECT * from tbl_student');
+    List<Map<String, dynamic>> studentsMap =
+        await db.rawQuery('SELECT * from tbl_student');
 
-    await Future.delayed(const Duration(seconds: 3));
+    //await Future.delayed(const Duration(seconds: 3));
     return studentsMap;
   }
+
+  Future<int> deleteStudent(int id) async {
+    Database db = await instance.database;
+
+    int result = await db.rawDelete('DELETE from tbl_student where id=?', [id]);
+
+    return result;
+  }
+
+  Future<int> updateStudent(Student s) async {
+    Database db = await instance.database;
+
+    int result = await db.update(
+      'tbl_student',
+      s.toMap(),
+      where: 'id=?',
+      whereArgs: [s.id],
+    );
+
+    return result;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
